@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="8.1. 정적분 및 동기화 극한 정의의 재정립">
+    <title>8.1. 정적분 및 동기화 극한 정의의 재정립 - UFT Bae Theory</title>
+    <script src="../lock.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-color: #e6edf3;
+            --secondary-text: #b1bac4;
+            --accent-color: #58a6ff;
+            --highlight-color: #79c0ff;
+            --border-color: #30363d;
+            --note-bg: rgba(255, 255, 255, 0.05);
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.85;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .wrapper {
+            max-width: 950px;
+            width: 100%;
+            padding: 80px 40px;
+        }
+        .hero-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .hero-title {
+            font-family: 'Noto Serif KR', serif;
+            color: var(--highlight-color);
+            font-size: 2.15rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+        .hero-subtitle {
+            color: var(--secondary-text);
+            font-size: 1.05rem;
+        }
+        article {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 42px;
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.24);
+        }
+        h2, h3, h4 {
+            color: var(--accent-color);
+            margin-top: 2.4rem;
+            margin-bottom: 1rem;
+            line-height: 1.45;
+        }
+        h2 {
+            font-size: 1.55rem;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 16px;
+        }
+        h3 { font-size: 1.28rem; }
+        h4 { font-size: 1.12rem; }
+        p {
+            margin: 1.05rem 0;
+            color: var(--text-color);
+            font-size: 1.02rem;
+        }
+        strong { color: #ffffff; font-weight: 700; }
+        code {
+            background: var(--note-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.08rem 0.35rem;
+            color: #c9d1d9;
+        }
+        .math-block {
+            margin: 1.4rem 0;
+            padding: 1rem 1.2rem;
+            overflow-x: auto;
+            background: rgba(88, 166, 255, 0.07);
+            border: 1px solid rgba(88, 166, 255, 0.22);
+            border-radius: 12px;
+        }
+        mjx-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            max-width: 100%;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid var(--border-color);
+            margin: 2.2rem 0;
+        }
+        @media (max-width: 768px) {
+            .wrapper { padding: 40px 18px; }
+            article { padding: 28px 20px; }
+            .hero-title { font-size: 1.65rem; }
+            p { font-size: 0.98rem; }
+        }
+    </style>
+</head>
+<body>
+    <p>초록 (Abstract)</p>
+
+<p>본 논문은 오귀스탱 루이 코시(Augustin-Louis Cauchy)와 베른하르트 리만(Bernhard Riemann)에 의해 확립된 현대 표준 해석학의 '기하학적 면적' 중심 정적분 정의가 내포한 국소적 한계와 이로 인해 파생된 기하학적 모순들을 고찰한다. 특히, 피적분함수가 구간 내부 또는 외부의 임의의 지점에서 불연속인 특이점(Singularity)을 가질 때 정적분의 기본 정리가 붕괴하는 현상을 극복하기 위한 새로운 대수학적 패러다임을 제안한다.</p>
+
+<p>본 연구는 미적분의 본질이 단순한 '도형의 넓이 측정'이 아닌 '경계 상태 함수 간의 대수적 차이 추적'이라는 뉴턴(Newton)의 원초적 직관에 바탕을 둔다. 우주 전체의 기준 배경이자 단일 원천인 $-\infty$ 를 하한 기점으로 삼는 동기화된 극한 정적분 공식(Synchronized Limit Definite Integral)을 정의하고, "공통 인자의 선(先) 대수 상쇄 후(後) 극한 적용" 원칙을 수립한다. 이 대수적 우선순위 체계 하에서는 $1/x^2$ 과 같은 강력한 우함수 형태의 내부 특이점은 물론, 진동 불능 상태에 빠지는 삼각함수, 복소 대수 공간 상의 정의역 이탈, 그리고 적분 구간 좌측에 편이되어 존재하는 특이점 폭발 성분들이 임의의 기만적인 가공(재규격화 및 하다마르 유한부분법) 없이 대수적으로 완벽하게 자동 소거(Cancellation)됨을 5가지 대표 함수 케이스의 한 단계씩의 엄밀한 증명을 통해 실체적으로 입증한다.</p>
+    
+    
+        <!-- UFT 전문 보기 로그인 안내 카드 (Teaser Card) -->
+        <div class="teaser-card" style="margin-top:60px; padding:35px; background:linear-gradient(135deg, rgba(32,29,51,0.75) 0%, rgba(60,42,99,0.45) 100%); border:1px solid #5d3d9c; border-radius:14px; text-align:center; box-shadow: 0 10px 40px rgba(0,0,0,0.65); backdrop-filter: blur(8px); max-width: 900px; margin-left: auto; margin-right: auto;">
+            <div style="font-size:48px; margin-bottom:15px; animation: pulse 2s infinite;">🔐</div>
+            <h4 style="color:#d6bcfa; margin: 0 0 12px 0; font-size:22px; font-weight:700; font-family:'Noto Sans KR',sans-serif; letter-spacing:-0.5px;">이 챕터는 UFT 핵심 연구 기밀 문서입니다</h4>
+            <p style="color:#a5b1c2; font-size:14.5px; line-height:1.7; margin: 0 0 25px 0; font-family:'Noto Sans KR',sans-serif; font-weight:300;">
+                본 챕터의 상세 수식 유도, 물리량 계산 분석 및 시뮬레이션 원문을 열람하시려면<br>
+                UFT 공동 연구자 계정 로그인이 필요합니다.
+            </p>
+            <button onclick="window.parent && window.parent.triggerLogin ? window.parent.triggerLogin() : window.location.href='/private/login/'" style="background:#7928ca; color:#fff; border:none; padding:13px 32px; border-radius:8px; font-weight:bold; font-size:15px; cursor:pointer; transition:all 0.2s; box-shadow: 0 4px 20px rgba(121,40,202,0.5); font-family:'Noto Sans KR',sans-serif;" onmouseover="this.style.background='#8e33eb'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#7928ca'; this.style.transform='translateY(0)';">
+                <i class="fas fa-user-lock" style="margin-right:8px;"></i> 연구자 로그인하여 전문 보기 (Read Full Version)
+            </button>
+            <style>
+                @keyframes pulse {
+                    0% { transform: scale(1); opacity: 0.9; }
+                    50% { transform: scale(1.08); opacity: 1; }
+                    100% { transform: scale(1); opacity: 0.9; }
+                }
+            </style>
+        </div>
+
+</body>
+</html>

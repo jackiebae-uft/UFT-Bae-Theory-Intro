@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UFT 복소전하 4D Model V.70</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            margin: 0; 
+            overflow-x: hidden; 
+            overflow-y: auto; 
+            background-color: #0d1117; 
+            font-family: 'Inter', sans-serif;
+            color: #ffffff;
+        }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        #title-box {
+            position: fixed; 
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            text-align: center;
+            color: #ffffff;
+            text-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+            pointer-events: none;
+        }
+        #info-box {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 10;
+            background: rgba(18, 26, 35, 0.85); 
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 5px solid #22c55e;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            font-size: 0.85rem;
+            width: 320px; 
+            line-height: 1.5;
+        }
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 3px;
+        }
+        .info-label { font-weight: bold; color: #94a3b8; }
+        .info-value { text-align: right; }
+
+        #controls-panel {
+            position: fixed; 
+            top: 60px; 
+            right: 20px; 
+            z-index: 10;
+            background: rgba(18, 26, 35, 0.9); 
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+            width: 320px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .speed-label { font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.25rem; }
+        .speed-display { font-size: 1.1rem; font-weight: 700; color: #ffffff; margin-bottom: 0.6rem; }
+        input[type=range] { width: 100%; height: 6px; background: #475569; border-radius: 3px; outline: none; -webkit-appearance: none; margin-bottom: 1rem; cursor: pointer; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #22c55e; cursor: pointer; border: 2px solid white; }
+        .state-display { background-color: #334155; color: #e2e8f0; padding: 8px; border-radius: 6px; text-align: center; font-size: 0.85rem; font-weight: 600; margin-bottom: 1rem; }
+        
+        .slow-group { display: flex; gap: 4px; margin-bottom: 1rem; }
+        .slow-btn { flex: 3; padding: 10px; border-radius: 6px; font-weight: 700; font-size: 0.8rem; cursor: pointer; transition: all 0.3s; border: 2px solid #fbbf24; background: transparent; color: #fbbf24; }
+        .slow-btn.active { background: #fbbf24; color: #0d1117; }
+        .slow-toggle-btn { flex: 2; padding: 10px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; border: 1px solid #94a3b8; background: #1e293b; color: white; }
+        .slow-toggle-btn:hover { background: #334155; }
+
+        .nav-group { display: flex; gap: 8px; margin-bottom: 0; }
+        .nav-btn { flex: 1; padding: 10px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; color: white; border: none; display: flex; align-items: center; justify-content: center; }
+        .btn-pause { background-color: #dc2626; } 
+        .btn-play { background-color: #16a34a; } 
+        .btn-reset { background-color: #0e7490; } 
+        .mouse-guide { margin-top: 1rem; text-align: center; font-size: 0.75rem; color: #64748b; }
+        .speed-indicator-container { position: relative; height: 15px; margin-top: 5px; }
+        .speed-marker { position: absolute; top: 100%; transform: translateX(-50%); font-size: 0.65rem; color: #94a3b8; white-space: nowrap; }
+        
+        .mag-control-box { background-color: #1e293b; border-radius: 8px; padding: 10px; margin-bottom: 15px; border: 1px solid #334155; }
+        .mag-display { background-color: #0f172a; color: #fbbf24; font-family: monospace; font-size: 0.9rem; text-align: center; padding: 4px 0; border-radius: 4px; margin: 0 5px; flex-grow: 1; }
+        .mag-btn { background-color: #1d4ed8; color: white; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.2s, opacity 0.2s; height: 2rem; width: 2rem; display: flex; align-items: center; justify-content: center; border: none; }
+        .mag-btn:hover { background-color: #2563eb; }
+        .mag-btn:disabled { background-color: #334155; color: #64748b; cursor: not-allowed; opacity: 0.4; }
+
+        #webgl-error {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(220, 38, 38, 0.9);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+    </style>
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+
+    <div id="title-box">
+        <h1 class="text-3xl font-bold text-white">UFT 복소전하 4D Model V.70</h1>
+        <p class="text-gray-400 text-sm mt-1">블루 톤 자기장 필드 및 수직 화살표 투명도 보정</p>
+    </div>
+
+    <div id="info-box">
+        <h2 class="lg font-semibold mb-2 text-white border-b border-gray-600 pb-2">모델링 해석</h2>
+        <div class="flex flex-col gap-2">
+            <div class="info-item">
+                <span class="info-label text-gray-400">시스템 모드</span>
+                <span class="info-value text-yellow-400 font-bold">단일 쌍둥이 (1+1) 전용</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label text-gray-400">창출전하 강도 (Q)</span>
+                <span class="info-value text-green-400 font-bold" id="chargeResultDisplay">1.00 Qp</span>
+            </div>
+            <p class="text-xs text-gray-400 leading-tight" id="logicDescription">
+                * 업데이트: 중앙 세로 축의 상하 화살표 투명도를 70%로 조정하여 시각적 밸런스를 맞췄습니다. 자기장 필드는 파란색 계열을 유지합니다.
+            </p>
+        </div>
+    </div>
+
+    <div id="controls-panel">
+        <div class="slow-group">
+            <button id="toggleSlowMotion" class="slow-btn" onclick="toggleSlowMotion()">Slow: OFF</button>
+            <button id="btnSlowTogglePlay" class="slow-toggle-btn" onclick="togglePlayPause()">Pause</button>
+        </div>
+
+        <div class="mag-control-box">
+            <div class="text-xs text-gray-400 mb-2 font-bold uppercase tracking-wider">에너지 할당 (Lv)</div>
+            <div class="mb-3">
+                <div class="flex justify-between text-xs text-blue-400 mb-1 font-semibold">
+                    <span>좌측 입자 (u-) Lv</span>
+                    <span id="magLeftVal" class="text-white">32</span>
+                </div>
+                <div class="flex items-center">
+                    <button class="mag-btn" onclick="changeMagnitude('left', -1)">-</button>
+                    <div id="magLeftDisplay" class="mag-display">Lv. 6</div>
+                    <button class="mag-btn" onclick="changeMagnitude('left', 1)">+</button>
+                </div>
+            </div>
+            <div>
+                <div class="flex justify-between text-xs text-sky-400 mb-1 font-semibold">
+                    <span>우측 입자 (u+) Lv</span>
+                    <span id="magRightVal" class="text-white">32</span>
+                </div>
+                <div class="flex items-center">
+                    <button class="mag-btn" onclick="changeMagnitude('right', -1)">-</button>
+                    <div id="magRightDisplay" class="mag-display">Lv. 6</div>
+                    <button class="mag-btn" onclick="changeMagnitude('right', 1)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="speed-label">결합 공전 속도 (1 ~ 36)</div>
+        <div id="speedDisplay" class="speed-display" style="color: rgb(34, 197, 94);">v = c (광속 임계)</div>
+        <input type="range" id="speedSlider" min="1" max="36" value="36" step="1" disabled>
+        <div id="step-markers-container" class="speed-indicator-container"></div>
+        <div class="state-display" id="stateDisplay">상태: 수직 축 화살표 투명도 보정</div>
+        <div class="nav-group">
+            <button id="btnPauseGlobal" class="nav-btn btn-pause" onclick="pauseAnimation()">Pause</button>
+            <button id="btnPlayGlobal" class="nav-btn btn-play" onclick="playAnimation()">Play</button>
+            <button id="btnReset" class="nav-btn btn-reset" onclick="resetView()">Reset</button>
+        </div>
+        <div class="mouse-guide">* 마우스: 회전(좌클릭), 이동(우클릭, 스크롤)</div>
+    </div>
+
+    <div id="webgl-error">
+        <h2 class="text-xl font-bold mb-2">WebGL 렌더링 오류</h2>
+        <p>브라우저가 WebGL을 지원하지 않거나 하드웨어 가속이 비활성화되어 있습니다.</p>
+    </div>
+
+    <script>
+        /** * UFT 4D 모델링 V.70 - 수직 축 화살표 투명도 보정 버전
+         */
+        let scene, camera, renderer, controls;
+        let currentR_Left, currentR_Right;
+        let uPlus, uMinus, centralMass; 
+        let magneticFieldGroup, uMinusFieldGroup, orbitArrowGroup;
+        let orbitRingPlus, orbitRingMinus;
+        let centralAxisArrows; 
+        
+        let centralHighlightArrows = [];
+        let isAnimating = true;
+        let isSlowMotion = false; 
+        let accumulatedTime = 0;
+        let lastTime = 0;
+        let currentTheta = 0; 
+        
+        const MAX_SPEED_VALUE = 2400; 
+        const SPEED_OF_LIGHT = 2400; 
+        let currentRealSpeed = 2400; 
+        let currentSpeedLevel = 36; 
+
+        const initialCameraPosition = new THREE.Vector3(40, 30, 60); 
+
+        const magLevels = [1, 2, 4, 8, 16, 32];
+        let magLeftIdx = 5; 
+        let magRightIdx = 5; 
+
+        const PARTICLE_BASE_FACTOR = 1.4; 
+        const FIELD_RADIUS_FACTORS = [0.4, 0.7, 1.0, 1.3, 1.6];
+
+        // 테마 색상 (에너지 축 및 벡터 - 초록색)
+        const THEME_COLOR = 0x00FF00; 
+
+        function safeSetText(id, text) {
+            const el = document.getElementById(id);
+            if (el) el.innerText = text;
+        }
+
+        function init() {
+            try {
+                scene = new THREE.Scene();
+                const aspect = window.innerWidth / window.innerHeight;
+                camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 10000);
+                camera.position.copy(initialCameraPosition); 
+
+                renderer = new THREE.WebGLRenderer({ 
+                    antialias: true, 
+                    alpha: true,
+                    powerPreference: "high-performance"
+                }); 
+                
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(window.devicePixelRatio);
+                document.body.appendChild(renderer.domElement);
+            } catch (e) {
+                console.error("WebGL 초기화 실패:", e);
+                document.getElementById('webgl-error').style.display = 'block';
+                return;
+            }
+
+            scene.add(new THREE.AmbientLight(0x404040, 6)); 
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8); 
+            directionalLight.position.set(5, 5, 5);
+            scene.add(directionalLight);
+
+            orbitArrowGroup = new THREE.Group();
+            scene.add(orbitArrowGroup);
+
+            centralAxisArrows = new THREE.Group();
+            scene.add(centralAxisArrows);
+
+            createParticlesAndField();
+            
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.target.set(0, 0, 0); 
+            controls.update(); 
+
+            window.addEventListener('resize', onWindowResize, false);
+            
+            renderSpeedMarkers();
+            updateMagnitudeUI();
+            updateSpeedFromCharge(); 
+            updateSystemConfig();    
+            updatePhysicsState();    
+
+            lastTime = performance.now() * 0.001;
+            animate();
+        }
+
+        function toggleSlowMotion() {
+            isSlowMotion = !isSlowMotion;
+            const btn = document.getElementById('toggleSlowMotion');
+            if (btn) {
+                btn.innerText = isSlowMotion ? "Slow: ON" : "Slow: OFF";
+                isSlowMotion ? btn.classList.add('active') : btn.classList.remove('active');
+            }
+        }
+
+        function togglePlayPause() {
+            if (isAnimating) pauseAnimation(); else playAnimation();
+        }
+        function pauseAnimation() { isAnimating = false; updatePlayPauseButtonUI(); }
+        function playAnimation() { isAnimating = true; lastTime = performance.now() * 0.001; updatePlayPauseButtonUI(); }
+        function updatePlayPauseButtonUI() {
+            const btn = document.getElementById('btnSlowTogglePlay');
+            if (btn) btn.innerText = isAnimating ? "Pause" : "Resume";
+        }
+
+        window.changeMagnitude = function(side, delta) {
+            if (side === 'left') magLeftIdx = Math.max(0, Math.min(magLevels.length - 1, magLeftIdx + delta));
+            else magRightIdx = Math.max(0, Math.min(magLevels.length - 1, magRightIdx + delta));
+            updateMagnitudeUI();
+            updateSpeedFromCharge(); 
+            updateSystemConfig();    
+            updatePhysicsState();    
+        };
+
+        function updateMagnitudeUI() {
+            safeSetText('magLeftVal', magLevels[magLeftIdx]);
+            safeSetText('magLeftDisplay', `Lv. ${magLeftIdx + 1}`);
+            safeSetText('magRightVal', magLevels[magRightIdx]);
+            safeSetText('magRightDisplay', `Lv. ${magRightIdx + 1}`);
+        }
+
+        function updateSpeedFromCharge() {
+            const leftLv = magLeftIdx + 1;
+            const rightLv = magRightIdx + 1;
+            currentSpeedLevel = Math.max(leftLv, rightLv) * Math.min(leftLv, rightLv); 
+            const display = document.getElementById('speedDisplay');
+            if (display) {
+                display.innerText = (currentSpeedLevel >= 36) ? "v = c (광속 임계)" : `v = Lv ${currentSpeedLevel}`;
+                display.style.color = (currentSpeedLevel >= 36) ? "rgb(34, 197, 94)" : "#ffffff";
+            }
+            currentRealSpeed = (Math.min(currentSpeedLevel, 36) / 36.0) * MAX_SPEED_VALUE;
+        }
+
+        function updateSystemConfig() {
+            const leftLv = magLeftIdx + 1;
+            const rightLv = magRightIdx + 1;
+            const avgLv = (leftLv + rightLv) / 2;
+            const diff = magRightIdx - magLeftIdx; 
+
+            const globalSystemScale = avgLv / 4.0; 
+            currentR_Right = (8.0 - diff) * globalSystemScale;
+            currentR_Left = (8.0 + diff) * globalSystemScale;
+
+            const scaleLvLeft = leftLv * PARTICLE_BASE_FACTOR; 
+            const scaleLvRight = rightLv * PARTICLE_BASE_FACTOR; 
+
+            if (uMinus) uMinus.scale.setScalar(scaleLvLeft);
+            if (uPlus) uPlus.scale.setScalar(scaleLvRight);
+
+            centralHighlightArrows = [];
+
+            // 좌측: 진한 파란색 (u-)
+            rebuildFieldGroup(uMinusFieldGroup, FIELD_RADIUS_FACTORS, 0x0044FF, true, scaleLvLeft, currentR_Left);
+            // 우측: 밝은 파란색 (u+)
+            rebuildFieldGroup(magneticFieldGroup, FIELD_RADIUS_FACTORS, 0x00CCFF, false, scaleLvRight, currentR_Right);
+
+            const clearOrbit = (o) => { if(o) { scene.remove(o); if(o.geometry) o.geometry.dispose(); } };
+            [orbitRingPlus, orbitRingMinus].forEach(clearOrbit);
+
+            const ringMat = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0.15 });
+            orbitRingPlus = new THREE.Mesh(new THREE.TorusGeometry(currentR_Right, 0.05 * globalSystemScale, 16, 100), ringMat);
+            orbitRingPlus.rotation.x = Math.PI / 2; orbitRingPlus.position.y = 0; scene.add(orbitRingPlus);
+            orbitRingMinus = new THREE.Mesh(new THREE.TorusGeometry(currentR_Left, 0.05 * globalSystemScale, 16, 100), ringMat);
+            orbitRingMinus.rotation.x = Math.PI / 2; orbitRingMinus.position.y = 0; scene.add(orbitRingMinus);
+
+            updateOrbitArrows(currentR_Right, currentR_Left, globalSystemScale);
+        }
+
+        function updateOrbitArrows(rRight, rLeft, gScale) {
+            while(orbitArrowGroup.children.length > 0){ 
+                const child = orbitArrowGroup.children[0];
+                if(child.geometry) child.geometry.dispose();
+                orbitArrowGroup.remove(child); 
+            }
+            const addArrowsAtH = (radius, h) => {
+                for(let i=0; i<4; i++) {
+                    const angle = (i * Math.PI / 2);
+                    const pos = new THREE.Vector3(radius * Math.cos(angle), h, radius * Math.sin(angle));
+                    const dir = new THREE.Vector3(-Math.sin(angle), 0, Math.cos(angle)).negate();
+                    createCustomArrow(pos, dir, 0xFFFFFF, 1.0 * gScale, orbitArrowGroup);
+                }
+            };
+            addArrowsAtH(rRight, 0); addArrowsAtH(rLeft, 0);
+        }
+
+        function rebuildFieldGroup(group, radiusFactors, colorHex, isUMinus, currentParticleScale, currentOrbitR) {
+            if (!group) return;
+            while(group.children.length > 0){ 
+                const child = group.children[0];
+                if(child.geometry) child.geometry.dispose();
+                group.remove(child); 
+            }
+            
+            const arrowDir = new THREE.Vector3(0, 0, -1); 
+            const totalLength = currentParticleScale * 3.2; 
+            const cylRadius = 0.15 * (currentParticleScale / (PARTICLE_BASE_FACTOR * 4)); 
+            
+            const cylGeom = new THREE.CylinderGeometry(cylRadius, cylRadius, totalLength, 12);
+            const cylinder = new THREE.Mesh(cylGeom, new THREE.MeshBasicMaterial({ color: THEME_COLOR }));
+            cylinder.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 1));
+            group.add(cylinder);
+
+            const headScale = currentParticleScale * 0.6;
+            const distFromCenter = totalLength / 2;
+            const posTop = new THREE.Vector3(0, 0, distFromCenter).add(arrowDir.clone().multiplyScalar(headScale * 0.5));
+            createCustomArrow(posTop, arrowDir, THEME_COLOR, headScale, group);
+            const posBottom = new THREE.Vector3(0, 0, -distFromCenter).add(arrowDir.clone().multiplyScalar(headScale * 0.5));
+            createCustomArrow(posBottom, arrowDir, THEME_COLOR, headScale, group);
+
+            for (let factor of radiusFactors) {
+                const actualR = currentOrbitR * factor;
+                const isMainLoop = Math.abs(factor - 1.0) < 0.01;
+                createFieldLoopAroundWire(0, actualR, colorHex, group, isUMinus, 4, headScale * 0.45, isMainLoop, currentParticleScale, currentOrbitR);
+            }
+        }
+
+        function createFieldLoopAroundWire(rotationY, loopScale, colorHex, parentGroup, reverseArrow, numArrows, arrowScale, isMainLoop, particleScale, currentOrbitR) {
+            const curve = new THREE.EllipseCurve(0, 0, loopScale, loopScale, 0, 2 * Math.PI, false, 0);
+            const pathPoints = curve.getPoints(64).map(p => new THREE.Vector3(p.x, p.y, 0).applyAxisAngle(new THREE.Vector3(0, 1, 0), rotationY));
+            const path = new THREE.CatmullRomCurve3(pathPoints, true);
+            const scaleRatio = particleScale / (PARTICLE_BASE_FACTOR * 4);
+
+            if (isMainLoop) {
+                const geometry = new THREE.TubeGeometry(path, 64, 0.15 * scaleRatio, 6, true);
+                parentGroup.add(new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ color: colorHex, side: THREE.DoubleSide })));
+            } else {
+                const geometry = new THREE.BufferGeometry().setFromPoints(pathPoints);
+                const mat = new THREE.LineDashedMaterial({ 
+                    color: colorHex, dashSize: 0.3 * scaleRatio, gapSize: 0.3 * scaleRatio, transparent: true, opacity: 0.45 
+                });
+                const line = new THREE.Line(geometry, mat); line.computeLineDistances();
+                parentGroup.add(line);
+                const offVal = 0.016 * scaleRatio;
+                [-offVal, offVal].forEach(off => { const c = line.clone(); c.position.y += off; parentGroup.add(c); });
+            }
+
+            for (let i = 0; i < numArrows; i++) {
+                const t = i / numArrows;
+                const point = path.getPointAt(t);
+                const isAtCenterAxis = isMainLoop && Math.abs(point.x + currentOrbitR) < (particleScale * 0.3);
+                
+                let finalArrowColor = colorHex;
+                let finalArrowScale = arrowScale;
+                let onTop = false;
+
+                if (isAtCenterAxis) {
+                    finalArrowColor = THEME_COLOR;
+                    finalArrowScale = arrowScale * 4.0; 
+                    onTop = true; 
+                }
+
+                let dir = path.getTangentAt(t).normalize().negate();
+                if (colorHex !== 0x0044FF && reverseArrow) dir.negate(); 
+                
+                const arrow = createCustomArrow(point, dir, finalArrowColor, finalArrowScale, parentGroup, isMainLoop ? (0.4 * scaleRatio) : 0, onTop); 
+                if (onTop) centralHighlightArrows.push(arrow);
+            }
+        }
+
+        // [수정] 투명도(opacity) 매개변수 추가
+        function createCustomArrow(position, direction, color, scale = 1.0, parent = scene, overlap = 0, onTop = false, opacity = 1.0) {
+            const coneHead = new THREE.Mesh(
+                new THREE.ConeGeometry(0.25 * scale, 1.0 * scale, 32), 
+                new THREE.MeshBasicMaterial({ 
+                    color: color,
+                    transparent: (onTop || opacity < 1.0),
+                    opacity: opacity,
+                    depthTest: !onTop 
+                })
+            );
+            coneHead.setRotationFromQuaternion(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.clone().normalize()));
+            coneHead.position.copy(position.clone().sub(direction.clone().normalize().multiplyScalar((1.0*scale/2) - overlap)));
+            if (onTop) coneHead.renderOrder = 10000; 
+            parent.add(coneHead); return coneHead;
+        }
+
+        function createParticlesAndField() {
+            const makePart = (color) => {
+                const g = new THREE.Group();
+                const mat = new THREE.MeshStandardMaterial({ 
+                    color: color, 
+                    roughness: 1.0, 
+                    metalness: 0.0,
+                    transparent: true, 
+                    opacity: 0.8 
+                });
+                g.add(new THREE.Mesh(new THREE.SphereGeometry(1.0, 32, 32), mat));
+                return g;
+            };
+            uPlus = makePart(0xcc4444); scene.add(uPlus); 
+            uMinus = makePart(0xcc4444); scene.add(uMinus);
+
+            centralMass = new THREE.Group();
+            const commonMat = (c) => new THREE.MeshStandardMaterial({ color: c, emissive: c, emissiveIntensity: 1.0, transparent: true, opacity: 0.2, side: THREE.DoubleSide, wireframe: true });
+            centralMass.add(new THREE.Mesh(new THREE.SphereGeometry(1.0, 24, 24, 0, Math.PI * 2, 0, Math.PI / 2), commonMat(0xff00ff)));
+            centralMass.add(new THREE.Mesh(new THREE.SphereGeometry(1.0, 24, 24, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), commonMat(0xff00ff)));
+            
+            const innerCenterRingGeom = new THREE.RingGeometry(0.08, 0.14, 64);
+            const innerCenterRing = new THREE.Mesh(innerCenterRingGeom, new THREE.MeshBasicMaterial({ color: 0x00FFFF, side: THREE.DoubleSide, transparent: true, opacity: 0.9 }));
+            innerCenterRing.rotation.x = Math.PI / 2;
+            innerCenterRing.name = "originalCenterRing";
+            centralMass.add(innerCenterRing);
+
+            const equatorialWideRingGeom = new THREE.RingGeometry(1.02, 1.15, 64);
+            const equatorialWideRingMat = new THREE.MeshBasicMaterial({ color: 0x00FFFF, side: THREE.DoubleSide, transparent: true, opacity: 0.3 });
+            const equatorialWideRing = new THREE.Mesh(equatorialWideRingGeom, equatorialWideRingMat);
+            equatorialWideRing.rotation.x = Math.PI / 2;
+            equatorialWideRing.name = "equatorialWideRing";
+            centralMass.add(equatorialWideRing);
+
+            centralMass.renderOrder = 2000; scene.add(centralMass);
+
+            magneticFieldGroup = new THREE.Group(); scene.add(magneticFieldGroup);
+            uMinusFieldGroup = new THREE.Group(); scene.add(uMinusFieldGroup);
+
+            scene.add(new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 1000, 32), new THREE.MeshStandardMaterial({ color: THEME_COLOR, emissive: THEME_COLOR, emissiveIntensity: 2 })));
+        }
+
+        /**
+         * 중앙 축 화살표 정밀 배치
+         * [수정] 화살표 투명도를 70%(0.7)로 설정
+         */
+        function updateCentralAxisArrows(sphereRadius) {
+            while(centralAxisArrows.children.length > 0){ 
+                const child = centralAxisArrows.children[0];
+                if(child.geometry) child.geometry.dispose();
+                centralAxisArrows.remove(child); 
+            }
+            const arrowColor = THEME_COLOR;
+            const arrowDir = new THREE.Vector3(0, 1, 0); 
+            const arrowScale = 4.0 * (sphereRadius / 25.0); 
+            
+            const d_outside = sphereRadius * 1.2;
+            const offset = arrowScale * 0.5;
+
+            // 상단 바깥 초록 화살표 (투명도 0.7 적용)
+            createCustomArrow(new THREE.Vector3(0, d_outside + offset, 0), arrowDir, arrowColor, arrowScale, centralAxisArrows, 0, false, 0.7);
+            // 하단 바깥 초록 화살표 (투명도 0.7 적용)
+            createCustomArrow(new THREE.Vector3(0, -d_outside + offset, 0), arrowDir, arrowColor, arrowScale, centralAxisArrows, 0, false, 0.7);
+        }
+
+        function resetView() { 
+            camera.position.copy(initialCameraPosition); 
+            if (controls) controls.reset(); 
+            currentTheta = 0; playAnimation();
+        }
+
+        function onWindowResize() { 
+            if (!camera || !renderer) return;
+            camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); 
+        }
+        
+        function renderSpeedMarkers() {
+            const container = document.getElementById('step-markers-container');
+            if(!container) return;
+            container.innerHTML = '';
+            for(let i=1; i<=6; i++) {
+                const m = document.createElement('span'); m.className = 'speed-marker';
+                m.style.left = `${((i*6)/36)*100}%`; m.textContent = `Lv${i*6}`; container.appendChild(m);
+            }
+        }
+
+        function updatePhysicsState() {
+            const t = currentTheta; const t2 = t + Math.PI;
+            const rR = currentR_Right; const rL = currentR_Left;
+
+            const scaleLvLeft = (magLeftIdx + 1) * PARTICLE_BASE_FACTOR; 
+            const scaleLvRight = (magRightIdx + 1) * PARTICLE_BASE_FACTOR; 
+
+            const setPos = (p, m, theta, rad) => {
+                if (!p || !m) return;
+                const pos = new THREE.Vector3(rad * Math.cos(theta), 0, rad * Math.sin(theta));
+                p.position.copy(pos); m.position.copy(pos);
+                p.lookAt(new THREE.Vector3(rad * Math.cos(theta - 0.1), 0, rad * Math.sin(theta - 0.1)));
+                m.rotation.y = -theta;
+            };
+
+            setPos(uPlus, magneticFieldGroup, t, rR);
+            setPos(uMinus, uMinusFieldGroup, t2, rL);
+            
+            const qValue = (currentRealSpeed / SPEED_OF_LIGHT).toFixed(2);
+            safeSetText('chargeResultDisplay', `${qValue} Qp`);
+            
+            const maxRadialExtent = Math.max(rR + scaleLvRight, rL + scaleLvLeft);
+            const s = maxRadialExtent * 1.35; 
+
+            if (centralMass) centralMass.scale.setScalar(s);
+            updateCentralAxisArrows(s); 
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            if (isAnimating) {
+                const now = performance.now() * 0.001; const dt = now - lastTime;
+                lastTime = now; accumulatedTime += dt;
+                const slowMultiplier = isSlowMotion ? 0.1 : 1.0;
+                
+                currentTheta += dt * currentRealSpeed * 0.02 * -1 * slowMultiplier;
+                
+                updatePhysicsState();
+                
+                centralHighlightArrows.forEach(arrow => {
+                    arrow.material.opacity = 0.4 + Math.abs(Math.sin(accumulatedTime * 25)) * 0.6;
+                });
+
+                if (centralMass) {
+                    centralMass.children.forEach(c => { 
+                        if (c.material && c.geometry && c.geometry.type === 'SphereGeometry') {
+                            c.material.opacity = 0.2 + Math.sin(accumulatedTime * 10) * 0.1; 
+                        }
+                        // 적도 토성 띠 - 반짝임 강도 완화
+                        if (c.name === "equatorialWideRing") {
+                            c.rotation.z += dt * 4.0; 
+                            c.material.opacity = 0.15 + Math.sin(accumulatedTime * 8) * 0.1;
+                        }
+                        // 중앙 핵심 띠 - 하늘색, 강한 반짝임 유지
+                        if (c.name === "originalCenterRing") {
+                            c.material.opacity = 0.7 + Math.sin(accumulatedTime * 22) * 0.25;
+                        }
+                    });
+                }
+            }
+            if (controls) controls.update(); 
+            if (renderer && scene && camera) renderer.render(scene, camera);
+        }
+
+        window.onload = function() { init(); }
+    </script>
+</body>
+</html>

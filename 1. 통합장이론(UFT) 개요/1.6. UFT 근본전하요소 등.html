@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1.4 통합장이론(UFT) 근본전하요소 etc</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 40px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        
+        h1 { font-size: 2.2rem; color: #fff; margin-bottom: 30px; border-bottom: 2px solid #30363d; padding-bottom: 15px; }
+        
+        /* 4장~12장 제목 스타일 */
+        h4 { 
+            font-size: 1.4rem; 
+            color: #a5d6ff; 
+            margin-top: 50px; 
+            margin-bottom: 20px; 
+            font-weight: 700; 
+            border-left: 4px solid #58a6ff; 
+            padding-left: 15px; 
+            background: rgba(88, 166, 255, 0.05);
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        h5 {
+            font-size: 1.1rem;
+            color: #79c0ff;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+        
+        p { margin-bottom: 20px; font-weight: 300; text-align: justify; }
+        strong { color: #fff; font-weight: 700; }
+        ul { padding-left: 20px; margin-bottom: 30px; }
+        li { margin-bottom: 10px; }
+
+        .math-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.1rem;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>1.3 통합장이론(UFT) 근본전하요소 etc</h1>
+        
+        <p style="color: #8b949e; font-size: 0.9rem; margin-bottom: 40px;">
+            * 본 문서는 통합장이론(UFT)의 핵심 구성 요소인 근본 요소부터 현상론적 재해석까지의 상세 이론(4장~12장)을 포함합니다.
+        </p>
+
+        <h4>4. UFT 근본전하요소(FCE) 및 근본전하입자 ($F_{cp}$) </h4>
+        <h5>4.1. 근본전하요소 (FCE, Fundamental Charge Element)</h5>
+        
+        
+        <!-- UFT 전문 보기 로그인 안내 카드 (Teaser Card) -->
+        <div class="teaser-card" style="margin-top:60px; padding:35px; background:linear-gradient(135deg, rgba(32,29,51,0.75) 0%, rgba(60,42,99,0.45) 100%); border:1px solid #5d3d9c; border-radius:14px; text-align:center; box-shadow: 0 10px 40px rgba(0,0,0,0.65); backdrop-filter: blur(8px); max-width: 900px; margin-left: auto; margin-right: auto;">
+            <div style="font-size:48px; margin-bottom:15px; animation: pulse 2s infinite;">🔐</div>
+            <h4 style="color:#d6bcfa; margin: 0 0 12px 0; font-size:22px; font-weight:700; font-family:'Noto Sans KR',sans-serif; letter-spacing:-0.5px;">이 챕터는 UFT 핵심 연구 기밀 문서입니다</h4>
+            <p style="color:#a5b1c2; font-size:14.5px; line-height:1.7; margin: 0 0 25px 0; font-family:'Noto Sans KR',sans-serif; font-weight:300;">
+                본 챕터의 상세 수식 유도, 물리량 계산 분석 및 시뮬레이션 원문을 열람하시려면<br>
+                UFT 공동 연구자 계정 로그인이 필요합니다.
+            </p>
+            <button onclick="window.parent && window.parent.triggerLogin ? window.parent.triggerLogin() : window.location.href='/private/login/'" style="background:#7928ca; color:#fff; border:none; padding:13px 32px; border-radius:8px; font-weight:bold; font-size:15px; cursor:pointer; transition:all 0.2s; box-shadow: 0 4px 20px rgba(121,40,202,0.5); font-family:'Noto Sans KR',sans-serif;" onmouseover="this.style.background='#8e33eb'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#7928ca'; this.style.transform='translateY(0)';">
+                <i class="fas fa-user-lock" style="margin-right:8px;"></i> 연구자 로그인하여 전문 보기 (Read Full Version)
+            </button>
+            <style>
+                @keyframes pulse {
+                    0% { transform: scale(1); opacity: 0.9; }
+                    50% { transform: scale(1.08); opacity: 1; }
+                    100% { transform: scale(1); opacity: 0.9; }
+                }
+            </style>
+        </div>
+
+    </div>
+</body>
+</html>

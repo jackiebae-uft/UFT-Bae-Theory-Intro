@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="1.1. UFT 5+1대 근본상수 및 기본법칙 - 통합장이론(UFT)의 기계적 설계도와 절대 보존 법칙">
+    <meta name="robots" content="index, follow">
+    <title>1.1. UFT 5+1대 근본상수 및 기본법칙 - UFT Bae Theory</title>
+    
+    <!-- 보안/잠금 스크립트 -->
+    <script src="../lock.js"></script>
+
+    <!-- 폰트 및 아이콘 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Serif:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- MathJax 설정 -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #0d1117; 
+            --card-bg: #161b22;
+            --text-color: #c9d1d9;
+            --accent-color: #58a6ff;
+            --highlight-color: #79c0ff;
+            --border-color: #30363d;
+            --success-green: #2ea043;
+            --warning-red: #ff7b72;
+            --gemini-blue: #4285f4;
+            --note-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 950px;
+            width: 100%;
+            padding: 60px 40px;
+        }
+
+        h1 { font-size: 2.2rem; color: #fff; margin-bottom: 30px; border-bottom: 2px solid var(--border-color); padding-bottom: 15px; font-weight: 700; }
+        h2 { font-size: 1.8rem; color: var(--accent-color); margin-top: 50px; margin-bottom: 20px; border-left: 5px solid var(--accent-color); padding-left: 15px; }
+        h3 { font-size: 1.4rem; color: var(--highlight-color); margin-top: 40px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 20px; }
+
+        p { margin-bottom: 20px; text-align: justify; word-break: keep-all; font-weight: 300; }
+        strong { color: #fff; font-weight: 700; }
+
+        .math-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+            text-align: center;
+            font-size: 1.3rem;
+            overflow-x: auto;
+        }
+
+        .constant-list { list-style: none; padding: 0; margin: 30px 0; }
+        .constant-list li { 
+            background: var(--card-bg); 
+            border: 1px solid var(--border-color); 
+            border-radius: 8px; 
+            padding: 20px; 
+            margin-bottom: 15px; 
+            transition: transform 0.2s;
+        }
+        .constant-list li:hover { transform: translateX(5px); border-color: var(--accent-color); }
+        .constant-name { color: var(--accent-color); font-weight: 700; font-size: 1.1rem; display: block; margin-bottom: 5px; }
+        .constant-value { font-family: 'Serif', serif; color: #fff; font-size: 1.05rem; }
+
+        .law-box {
+            border-left: 4px solid var(--success-green);
+            background: rgba(46, 160, 67, 0.05);
+            padding: 20px 25px;
+            margin: 30px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        .law-title { color: #fff; font-weight: 700; display: block; margin-bottom: 10px; font-size: 1.2rem; }
+
+        .opinion-box {
+            background: rgba(66, 133, 244, 0.05);
+            border: 1px solid var(--gemini-blue);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 40px 0;
+        }
+        .opinion-title { color: var(--gemini-blue); font-weight: bold; font-size: 1.1rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+
+        footer { margin-top: 80px; text-align: center; color: #8b949e; font-size: 0.85rem; border-top: 1px solid var(--border-color); padding-top: 30px; }
+
+        .ai-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>1.1. UFT 5+1대 근본상수 및 기본법칙</h1>
+
+    <section>
+        
+        
+        <!-- UFT 전문 보기 로그인 안내 카드 (Teaser Card) -->
+        <div class="teaser-card" style="margin-top:60px; padding:35px; background:linear-gradient(135deg, rgba(32,29,51,0.75) 0%, rgba(60,42,99,0.45) 100%); border:1px solid #5d3d9c; border-radius:14px; text-align:center; box-shadow: 0 10px 40px rgba(0,0,0,0.65); backdrop-filter: blur(8px); max-width: 900px; margin-left: auto; margin-right: auto;">
+            <div style="font-size:48px; margin-bottom:15px; animation: pulse 2s infinite;">🔐</div>
+            <h4 style="color:#d6bcfa; margin: 0 0 12px 0; font-size:22px; font-weight:700; font-family:'Noto Sans KR',sans-serif; letter-spacing:-0.5px;">이 챕터는 UFT 핵심 연구 기밀 문서입니다</h4>
+            <p style="color:#a5b1c2; font-size:14.5px; line-height:1.7; margin: 0 0 25px 0; font-family:'Noto Sans KR',sans-serif; font-weight:300;">
+                본 챕터의 상세 수식 유도, 물리량 계산 분석 및 시뮬레이션 원문을 열람하시려면<br>
+                UFT 공동 연구자 계정 로그인이 필요합니다.
+            </p>
+            <button onclick="window.parent && window.parent.triggerLogin ? window.parent.triggerLogin() : window.location.href='/private/login/'" style="background:#7928ca; color:#fff; border:none; padding:13px 32px; border-radius:8px; font-weight:bold; font-size:15px; cursor:pointer; transition:all 0.2s; box-shadow: 0 4px 20px rgba(121,40,202,0.5); font-family:'Noto Sans KR',sans-serif;" onmouseover="this.style.background='#8e33eb'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#7928ca'; this.style.transform='translateY(0)';">
+                <i class="fas fa-user-lock" style="margin-right:8px;"></i> 연구자 로그인하여 전문 보기 (Read Full Version)
+            </button>
+            <style>
+                @keyframes pulse {
+                    0% { transform: scale(1); opacity: 0.9; }
+                    50% { transform: scale(1.08); opacity: 1; }
+                    100% { transform: scale(1); opacity: 0.9; }
+                }
+            </style>
+        </div>
+
+    </div>
+</body>
+</html>

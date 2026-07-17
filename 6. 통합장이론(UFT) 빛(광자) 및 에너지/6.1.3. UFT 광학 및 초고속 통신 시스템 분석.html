@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="UFT 기계적 광학 및 초고속 통신 시스템 분석 (32~51)">
+    <title>UFT 광학 및 초고속 통신 시스템 분석 - UFT Bae Theory</title>
+    
+    <!-- 보안/잠금 스크립트 -->
+    <script src="../lock.js"></script>
+
+    <!-- 폰트 및 아이콘 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- MathJax 설정 -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #0d1117; 
+            --card-bg: #161b22;
+            --text-color: #e6edf3;
+            --secondary-text: #b1bac4;
+            --accent-color: #58a6ff;
+            --highlight-color: #79c0ff;
+            --border-color: #30363d;
+            --table-header-bg: #21262d;
+            --table-row-hover: #1c2128;
+            --note-bg: rgba(255, 255, 255, 0.05);
+            --success-green: #2ea043;
+            --danger-red: #ff7b72;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .wrapper {
+            max-width: 950px;
+            width: 100%;
+            padding: 80px 40px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 40px;
+        }
+
+        h1 { font-size: 2.2rem; color: #fff; margin-bottom: 15px; word-break: keep-all; font-weight: 700; line-height: 1.4; }
+        .subtitle { font-size: 1.3rem; color: var(--secondary-text); margin-bottom: 30px; font-weight: 400; }
+
+        .info-block {
+            background: rgba(88, 166, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(88, 166, 255, 0.2);
+            text-align: left;
+            display: inline-block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        h2 { 
+            font-size: 1.6rem; 
+            color: var(--accent-color); 
+            margin-top: 60px; 
+            border-left: 5px solid var(--accent-color); 
+            padding-left: 15px; 
+            margin-bottom: 25px; 
+        }
+        
+        h3 { 
+            font-size: 1.3rem; 
+            color: var(--highlight-color); 
+            margin-top: 40px; 
+            margin-bottom: 15px; 
+            border-bottom: 1px solid var(--border-color); 
+            padding-bottom: 8px; 
+        }
+
+        p { margin-bottom: 20px; text-align: justify; word-break: keep-all; }
+        strong { color: #fff; font-weight: 700; }
+
+        .math-block {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+            font-size: 1.15rem;
+            overflow-x: auto;
+        }
+
+        ul, ol { padding-left: 20px; margin-bottom: 25px; }
+        li { margin-bottom: 15px; }
+
+        /* 테이블 스타일 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        th {
+            background-color: var(--table-header-bg);
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            font-weight: 700;
+            border-bottom: 2px solid var(--border-color);
+        }
+        td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+            vertical-align: middle;
+        }
+        tr:hover { background-color: var(--table-row-hover); }
+
+        footer { margin-top: 80px; text-align: center; color: #8b949e; font-size: 0.85rem; border-top: 1px solid var(--border-color); padding-top: 30px; }
+
+        @media (max-width: 768px) {
+            .wrapper { padding: 40px 20px; }
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.4rem; }
+            h3 { font-size: 1.2rem; }
+            table { font-size: 0.85rem; }
+            th, td { padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+    <header>
+        <h1>UFT 기계적 광학 및 초고속 통신 시스템 분석</h1>
+        <div class="subtitle">(32~51)</div>
+        <div class="info-block">
+            <p>본 분석은 조명 기구의 발광 메커니즘과 반도체 소자(TR/LED)의 초고속 제어 가능성, 그리고 전파와 빛의 경계를 허무는 Li-Fi 기술의 기계적 실체를 다룹니다.</p>
+        </div>
+    </header>
+
+    <section>
+    
+    
+        <!-- UFT 전문 보기 로그인 안내 카드 (Teaser Card) -->
+        <div class="teaser-card" style="margin-top:60px; padding:35px; background:linear-gradient(135deg, rgba(32,29,51,0.75) 0%, rgba(60,42,99,0.45) 100%); border:1px solid #5d3d9c; border-radius:14px; text-align:center; box-shadow: 0 10px 40px rgba(0,0,0,0.65); backdrop-filter: blur(8px); max-width: 900px; margin-left: auto; margin-right: auto;">
+            <div style="font-size:48px; margin-bottom:15px; animation: pulse 2s infinite;">🔐</div>
+            <h4 style="color:#d6bcfa; margin: 0 0 12px 0; font-size:22px; font-weight:700; font-family:'Noto Sans KR',sans-serif; letter-spacing:-0.5px;">이 챕터는 UFT 핵심 연구 기밀 문서입니다</h4>
+            <p style="color:#a5b1c2; font-size:14.5px; line-height:1.7; margin: 0 0 25px 0; font-family:'Noto Sans KR',sans-serif; font-weight:300;">
+                본 챕터의 상세 수식 유도, 물리량 계산 분석 및 시뮬레이션 원문을 열람하시려면<br>
+                UFT 공동 연구자 계정 로그인이 필요합니다.
+            </p>
+            <button onclick="window.parent && window.parent.triggerLogin ? window.parent.triggerLogin() : window.location.href='/private/login/'" style="background:#7928ca; color:#fff; border:none; padding:13px 32px; border-radius:8px; font-weight:bold; font-size:15px; cursor:pointer; transition:all 0.2s; box-shadow: 0 4px 20px rgba(121,40,202,0.5); font-family:'Noto Sans KR',sans-serif;" onmouseover="this.style.background='#8e33eb'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#7928ca'; this.style.transform='translateY(0)';">
+                <i class="fas fa-user-lock" style="margin-right:8px;"></i> 연구자 로그인하여 전문 보기 (Read Full Version)
+            </button>
+            <style>
+                @keyframes pulse {
+                    0% { transform: scale(1); opacity: 0.9; }
+                    50% { transform: scale(1.08); opacity: 1; }
+                    100% { transform: scale(1); opacity: 0.9; }
+                }
+            </style>
+        </div>
+
+</body>
+</html>

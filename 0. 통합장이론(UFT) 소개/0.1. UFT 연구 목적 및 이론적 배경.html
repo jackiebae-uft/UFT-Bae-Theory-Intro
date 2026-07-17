@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="통합장이론(UFT) 연구의 목적과 배경: 아인슈타인의 꿈을 완결하는 결정론적 우주 설계도.">
+    <meta name="robots" content="index, follow">
+    <title>0.1. 통합장이론(UFT) 연구의 목적과 배경 - UFT Bae Theory</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Serif:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #0d1117; 
+            --card-bg: #161b22;
+            --text-color: #e6edf3; /* 기존 #c9d1d9에서 더 밝게 수정 */
+            --secondary-text: #b1bac4; /* 기존 #8b949e에서 더 밝게 수정 */
+            --accent-color: #58a6ff;
+            --highlight-color: #79c0ff;
+            --border-color: #30363d;
+            --success-green: #2ea043;
+            --warning-red: #ff7b72;
+            --gemini-blue: #4285f4;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .wrapper {
+            max-width: 900px;
+            width: 100%;
+            padding: 80px 40px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 40px;
+        }
+
+        h1 { font-size: 2.2rem; color: #fff; margin-bottom: 15px; word-break: keep-all; font-weight: 700; }
+        h2 { font-size: 1.8rem; color: var(--accent-color); margin-top: 60px; border-left: 5px solid var(--accent-color); padding-left: 15px; margin-bottom: 25px; }
+        h3 { font-size: 1.4rem; color: #fff; margin-top: 40px; margin-bottom: 15px; font-weight: 700; }
+
+        p { margin-bottom: 20px; text-align: justify; word-break: keep-all; font-weight: 400; } /* weight 300 -> 400 상향 */
+        strong { color: #fff; font-weight: 700; }
+
+        /* Philosophy Highlight Box */
+        .philosophy-box {
+            background: rgba(88, 166, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .philosophy-box h3 { margin-top: 0; color: var(--highlight-color); }
+        .philosophy-box ul { list-style: none; padding: 0; margin: 0; }
+        .philosophy-box li { margin-bottom: 15px; padding-left: 30px; position: relative; font-weight: 400; }
+        .philosophy-box li::before {
+            content: "\f00c"; font-family: "Font Awesome 6 Free"; font-weight: 900;
+            position: absolute; left: 0; color: var(--success-green);
+        }
+
+        /* Precision Table */
+        .table-wrapper { overflow-x: auto; margin: 30px 0; border-radius: 10px; border: 1px solid var(--border-color); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--card-bg); font-size: 0.95rem; }
+        th { background-color: #21262d; color: var(--accent-color); padding: 15px; border-bottom: 2px solid var(--border-color); }
+        td { padding: 15px; border-bottom: 1px solid var(--border-color); text-align: center; color: var(--text-color); }
+        .u-highlight { color: #fff; font-weight: bold; background: rgba(88, 166, 255, 0.1); }
+
+        /* AI Report Grid */
+        .report-section { margin-top: 60px; }
+        .report-grid { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 20px; }
+        .report-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            display: block;
+        }
+        .report-card:hover { border-color: var(--accent-color); transform: translateY(-3px); background: rgba(88, 166, 255, 0.05); }
+        .report-tag { font-size: 0.75rem; font-weight: bold; color: var(--gemini-blue); text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .report-title { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 8px; display: block; }
+        .report-desc { font-size: 0.95rem; color: var(--secondary-text); line-height: 1.5; }
+
+        /* Lock Notice Box */
+        .lock-notice {
+            background: rgba(255, 123, 114, 0.05);
+            border: 1px dashed var(--warning-red);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 60px 0;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .lock-icon { font-size: 2rem; color: var(--warning-red); flex-shrink: 0; }
+        .lock-text h4 { margin: 0 0 5px 0; color: #fff; }
+        .lock-text p { margin: 0; font-size: 0.95rem; color: var(--secondary-text); }
+
+        .keyword-cloud {
+            margin-top: 80px; text-align: center; color: #768390; font-size: 0.85rem; padding-top: 20px; border-top: 1px solid var(--border-color);
+        }
+        .keyword-cloud span { margin: 0 8px; display: inline-block; }
+
+        footer { margin-top: 80px; text-align: center; color: var(--secondary-text); font-size: 0.85rem; padding-bottom: 40px; }
+
+        @media (max-width: 768px) {
+            .wrapper { padding: 40px 20px; }
+            h1 { font-size: 1.8rem; }
+            .lock-notice { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <header>
+        <h1>0.1. 통합장이론(UFT) 연구의 목적과 배경 (Abstract)</h1>
+        <div style="color: var(--accent-color); font-weight: 500; font-size: 1.1rem; margin-top: 10px;">The Deterministic Blueprint of the Universe</div>
+    </header>
+
+    <!-- Section 1 -->
+    <section>
+        <h2>1. UFT 연구의 목적: 아인슈타인의 꿈, 그 결정론적 마침표</h2>
+        <p>본 통합장이론(UFT)은 현대 물리학의 양대 거성인 상대성 이론과 양자역학의 구조적 모순을 해소하고, 우주의 모든 상호작용을 <strong>오직 전자기력과 운동역학적 평형</strong>만으로 통합하는 것을 목적으로 합니다.</p>
+        <p>기존 물리학이 현상 유지를 위해 도입했던 수많은 가설적 상수($G, \Lambda, \gamma$ 등)와 확률론적 해석을 걷어내고, <strong>우주 5+1 대 상수</strong>와 <strong>우주 절대 5 공식</strong>을 기반으로 한 <strong>기계적 인과율</strong>을 복원합니다. 이는 인류가 고대하던 '모든 것의 이론(Theory of Everything, TOE)'이 단순한 수학적 유희가 아닌, 실체적인 기하학적 설계도임을 입증하는 혁명적 전환점이 될 것입니다.</p>
+
+        <div class="philosophy-box">
+            <h3>UFT의 5대 핵심 기둥</h3>
+            <ul>
+                <li><strong>단일 힘의 통합:</strong> 중력, 강력, 약력은 독립된 힘이 아니며, 전하 벡터의 정렬도와 거리 해상도에 따른 전자기력의 변주입니다.</li>
+                <li><strong>완전한 결정론:</strong> "신은 주사위 놀이를 하지 않는다." 모든 미시 현상은 확률이 아닌 UFT 이차방정식의 정해에 따른 정교한 운동의 결과입니다.</li>
+                <li><strong>5+1 대 상수 체계:</strong> 우주의 규격($\pi, c$), 로직($k, Q_e, h$), 그리고 현실 물리 정합의 기준점($M_e$)으로 모든 물리량을 산출합니다.</li>
+                <li><strong>시공간의 절대성:</strong> 시공간의 비틀림(곡률) 가설을 배제하고, 유클리드 기하학 기반의 절대 공간과 절대 시간을 수용합니다.</li>
+                <li><strong>에너지 보존의 실체:</strong> 질량의 증가는 시공간의 왜곡이 아닌, 에너지가 관성 저항으로 응축된 물리적 결과($m = E/c^2$)입니다.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section>
+        <h2>2. UFT의 이론적 배경 및 수치 정밀도</h2>
+        <p>현대 물리학은 입자 내부의 운동 에너지($v^2$) 항을 누락한 선형 모델에 의존함으로써 미세한 오차를 상수($G$ 등)로 메워왔습니다. UFT는 이를 이차방정식의 정해로 바로잡아 우주 설계의 원형 수치를 제시합니다.</p>
+
+        <h3>[수치적 정밀도 비교: 미세구조상수($\alpha$)]</h3>
+        <p>UFT는 현대 물리학이 놓친 내부 동역학 보정치($\Delta v \approx 58.26 \text{ m/s}$)를 복원하여 다음과 같은 정밀 해를 도출합니다.</p>
+        
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>구분</th>
+                        <th>미세구조상수 역수 ($1/\alpha$)</th>
+                        <th>물리적 의미</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>현대 물리학 (선형 근사)</td>
+                        <td>$\approx 137.03599...$</td>
+                        <td>실험 관측치 기반의 커브 피팅 수치</td>
+                    </tr>
+                    <tr class="u-highlight">
+                        <td><strong>UFT (기계적 정해)</strong></td>
+                        <td>$\approx \mathbf{137.0323...}$</td>
+                        <td>5대 상수의 결속 방정식이 제공하는 설계 정해</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p style="font-size: 0.95rem; color: var(--secondary-text); border-left: 3px solid #30363d; padding-left: 15px;">
+            * 주석: 상기 수치의 상세한 이차방정식 유도 과정과 입자별($sysHcore$ 등) 평형 분석 데이터는 후속 연구 문서인 
+            <strong>[1.4.1. UFT 알파, v, D, 및 에너지 산출]</strong> 및 
+            <strong>[1.4.3. UFT 임계 평형 및 알파 상세 분석]</strong>에서 집중적으로 다룹니다.
+        </p>
+    </section>
+
+    <!-- AI Verification Reports -->
+    <section class="report-section">
+        <h3>🤖 AI 논리 검증 및 심층 분석 보고서 (Verified by AI)</h3>
+        <p style="font-size: 0.95rem; color: var(--secondary-text); margin-bottom: 25px;">본 이론의 학술적 타당성과 수리적 정밀도는 인공지능(AI) 시스템의 정밀 검토를 거쳐 그 정당성이 확인되었습니다.</p>
+        
+        <div class="report-grid">
+            <a href="../1. 통합장이론(UFT) 개요/1.3.5. [Gemini 최종 종합 보고서].html" class="report-card">
+                <span class="report-tag">Logic Verification</span>
+                <span class="report-title">[1.3.5] 구심력 오류 해체와 현대 물리학의 파산 선언</span>
+                <span class="report-desc">현대 물리학의 $R=D/2$ 오류를 수학적으로 증명하고, 에너지 보존 법칙의 복원을 검증함.</span>
+            </a>
+
+            <a href="../1. 통합장이론(UFT) 개요/1.4.x_[Gemini 종합 분석] UFT 1.4.0 ~ 1.4.5 핵심 설계도 정밀 검토 및 현대 물리학의 구조적 파산 선언.html" class="report-card">
+                <span class="report-tag">Structural Analysis</span>
+                <span class="report-title">[1.4.x] UFT 핵심 설계도 종합 분석 보고서</span>
+                <span class="report-desc">$\Delta v$ 의 발견과 미세구조상수의 기계적 유도 과정, 중력의 전자기적 기원 메커니즘을 심층 분석함.</span>
+            </a>
+
+            <a href="../2. 통합장이론(UFT) 복소전하벡터/2.1._Gemini Analysis & Spin Calculation.html" class="report-card">
+                <span class="report-tag">Geometric Proof</span>
+                <span class="report-title">[2.1] Gemini Analysis & Spin (1/2 h-bar) Calculation</span>
+                <span class="report-desc">양자역학의 스핀 값이 UFT의 코어 모델에서 기하학적으로 어떻게 필연 도출되는지 수리적 검증 완료.</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Access Control Notice -->
+    <section>
+        <div class="lock-notice">
+            <div class="lock-icon"><i class="fas fa-user-shield"></i></div>
+            <div class="lock-text">
+                <h4>기술 문서 열람 안내 (Access Control)</h4>
+                <p>UFT의 <strong>핵심 수식 유도 및 정밀 수치 산출</strong>을 포함한 일부 세부 문서는 지적 재산 보호를 위해 <strong>비밀번호 잠금(Password Protected)</strong> 처리가 되어 있습니다. 저자와 직접 소통하거나 학술적 목적을 가진 연구자에게 열람 권한이 제공됩니다.</p>
+            </div>
+        </div>
+        <p style="text-align: center; color: var(--secondary-text); font-size: 0.95rem;">
+            * 전체적인 이론의 흐름과 요약된 결론은 상기 AI 분석 보고서 및 [1. UFT 개요] 섹션에서 자유롭게 확인하실 수 있습니다.
+        </p>
+    </section>
+
+    <div class="keyword-cloud">
+        <span>#통합장이론</span> <span>#UnifiedFieldTheory</span> <span>#UFT</span> <span>#TOE</span> <span>#BaeTheory</span> <span>#AI_Verified</span> <span>#DeterministicPhysics</span> <span>#Alpha_137_0323</span>
+    </div>
+
+<!-- 하단 푸터 및 연락처 -->
+    <footer>
+        <div class="contact-info">
+            <i class="fas fa-envelope" style="margin-right: 8px;"></i>
+            연락처: <a href="mailto:admin@uft-bae-theory.com">admin@uft-bae-theory.com</a>
+        </div>
+        <p>&copy; 2026 Bae. All Rights Reserved. | Unified Field Theory Research</p>
+    </footer>
+    
+</div>
+
+</body>
+</html>

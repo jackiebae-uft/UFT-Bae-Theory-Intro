@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>연구 노트 101</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { background-color: #0d1117; color: #c9d1d9; font-family: 'Noto Sans KR', sans-serif; padding: 40px; line-height: 1.8; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { border-bottom: 2px dashed #30363d; padding-bottom: 15px; color: #fff; }
+        h2 { color: #58a6ff; margin-top: 40px; }
+        .math-box { background: rgba(255,255,255,0.03); padding: 20px; text-align: center; border-radius: 10px; margin: 20px 0; }
+        .idea-box { background: rgba(255, 255, 255, 0.05); border-left: 4px solid #f1e05a; padding: 20px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>연구 노트 101: (주제 입력)</h1>
+        <p style="color: #8b949e;">작성일: 2026.01.22 / 상태: 초안 (Draft)</p>
+        
+        
+        <!-- UFT 전문 보기 로그인 안내 카드 (Teaser Card) -->
+        <div class="teaser-card" style="margin-top:60px; padding:35px; background:linear-gradient(135deg, rgba(32,29,51,0.75) 0%, rgba(60,42,99,0.45) 100%); border:1px solid #5d3d9c; border-radius:14px; text-align:center; box-shadow: 0 10px 40px rgba(0,0,0,0.65); backdrop-filter: blur(8px); max-width: 900px; margin-left: auto; margin-right: auto;">
+            <div style="font-size:48px; margin-bottom:15px; animation: pulse 2s infinite;">🔐</div>
+            <h4 style="color:#d6bcfa; margin: 0 0 12px 0; font-size:22px; font-weight:700; font-family:'Noto Sans KR',sans-serif; letter-spacing:-0.5px;">이 챕터는 UFT 핵심 연구 기밀 문서입니다</h4>
+            <p style="color:#a5b1c2; font-size:14.5px; line-height:1.7; margin: 0 0 25px 0; font-family:'Noto Sans KR',sans-serif; font-weight:300;">
+                본 챕터의 상세 수식 유도, 물리량 계산 분석 및 시뮬레이션 원문을 열람하시려면<br>
+                UFT 공동 연구자 계정 로그인이 필요합니다.
+            </p>
+            <button onclick="window.parent && window.parent.triggerLogin ? window.parent.triggerLogin() : window.location.href='/private/login/'" style="background:#7928ca; color:#fff; border:none; padding:13px 32px; border-radius:8px; font-weight:bold; font-size:15px; cursor:pointer; transition:all 0.2s; box-shadow: 0 4px 20px rgba(121,40,202,0.5); font-family:'Noto Sans KR',sans-serif;" onmouseover="this.style.background='#8e33eb'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#7928ca'; this.style.transform='translateY(0)';">
+                <i class="fas fa-user-lock" style="margin-right:8px;"></i> 연구자 로그인하여 전문 보기 (Read Full Version)
+            </button>
+            <style>
+                @keyframes pulse {
+                    0% { transform: scale(1); opacity: 0.9; }
+                    50% { transform: scale(1.08); opacity: 1; }
+                    100% { transform: scale(1); opacity: 0.9; }
+                }
+            </style>
+        </div>
+
+    </div>
+</body>
+</html>
